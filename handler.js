@@ -2,6 +2,11 @@
 
 const { getLeagueOverview } = require('./espnReader');
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Credentials': true,
+};
+
 module.exports.hello = async event => {
   return {
     statusCode: 200,
@@ -26,6 +31,7 @@ module.exports.overview = async event => {
     const data = await getLeagueOverview(event.pathParameters.id, seasonId);
     return {
       statusCode: 200,
+      headers: corsHeaders,
       body: JSON.stringify(
         await data,
         null,
@@ -35,6 +41,7 @@ module.exports.overview = async event => {
   } else {
     return {
       statusCode: 400,
+      headers: corsHeaders,
       body: JSON.stringify(
         {
           message: 'No path parameter for league ID found'
