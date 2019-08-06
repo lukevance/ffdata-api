@@ -1,0 +1,19 @@
+{
+  "name": "serverless-espn-ffdata",
+  "version": "1.0.0",
+  "description": "Wrapper for ESPN Fantasy Football v3 API",
+  "main": "handler.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test-overview": "sls invoke local -f hello -p ./tests/sample-event.json"
+  },
+  "author": "@lukevance",
+  "license": "ISC"
+}

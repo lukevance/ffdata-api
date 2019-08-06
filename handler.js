@@ -1,5 +1,7 @@
 'use strict';
 
+const { getLeagueOverview } = require('./espnReader');
+
 module.exports.hello = async event => {
   return {
     statusCode: 200,
@@ -18,13 +20,14 @@ module.exports.hello = async event => {
 };
 
 module.exports.overview = async event => {
+  // if seasonId was passed as param, use that. If not, set default
+  const seasonId = event.queryStringParameters && event.queryStringParameters.season ? event.queryStringParameters.season : '2019'; // TODO: change to autodetected default season
   if (event.pathParameters){
+    const data = await getLeagueOverview(event.pathParameters.id, seasonId);
     return {
       statusCode: 200,
       body: JSON.stringify(
-        {
-          message: `Your league ID is: ${event.pathParameters.id}`
-        },
+        await data,
         null,
         2
       )
