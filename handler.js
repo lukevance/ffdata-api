@@ -50,3 +50,17 @@ module.exports.overview = async event => {
     };
   }
 };
+
+module.exports.weeklyRosters = async event => {
+  // TODO: implement roster retrieval
+  return {
+    statusCode: 200,
+    body: JSON.stringify(
+      {
+        message: 'Incomplete endpoint',
+      },
+      null,
+      2
+    ),
+  };
+};

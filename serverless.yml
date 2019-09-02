@@ -53,3 +53,10 @@ functions:
           path: leagues/{id}
           method: get
           cors: true
+  weeklyRosters:
+    handler: handler.weeklyRosters
+    events:
+      - http:
+          path: leagues/{id}/teams/{id}/roster
+          method: get
+          cors: true
