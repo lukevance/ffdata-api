@@ -57,7 +57,7 @@ module.exports.weeklyRosters = async event => {
     statusCode: 200,
     body: JSON.stringify(
       {
-        message: 'Incomplete endpoint',
+        message: `Roster data for team: ${event.pathParameters.teamId} in league: ${event.pathParameters.leagueId}. Week ${event.queryStringParameters.week || 'default'} `,
       },
       null,
       2

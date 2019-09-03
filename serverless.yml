@@ -50,13 +50,24 @@ functions:
     handler: handler.overview
     events:
       - http:
-          path: leagues/{id}
+          path: leagues/{leagueId}
           method: get
           cors: true
+          request:
+            parameters:
+              paths:
+                id: true
   weeklyRosters:
     handler: handler.weeklyRosters
     events:
       - http:
-          path: leagues/{id}/teams/{id}/roster
+          path: leagues/{leagueId}/teams/{teamId}/roster
           method: get
           cors: true
+          request:
+            parameters:
+              paths:
+                id: true
+                teamId: true
+              querystrings:
+                week: false
