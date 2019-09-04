@@ -56,7 +56,7 @@ functions:
           request:
             parameters:
               paths:
-                id: true
+                leagueId: true
   weeklyRosters:
     handler: handler.weeklyRosters
     events:
@@ -67,7 +67,7 @@ functions:
           request:
             parameters:
               paths:
-                id: true
+                leagueId: true
                 teamId: true
               querystrings:
                 week: false

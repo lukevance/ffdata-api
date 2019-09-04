@@ -1,6 +1,6 @@
 'use strict';
 
-const { getLeagueOverview } = require('./espnReader');
+const { getLeagueOverview, getRosterForWeek } = require('./espnReader');
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -53,12 +53,12 @@ module.exports.overview = async event => {
 
 module.exports.weeklyRosters = async event => {
   // TODO: implement roster retrieval
+  const seasonId = event.queryStringParameters && event.queryStringParameters.season ? event.queryStringParameters.season : '2019'; // TODO: change to autodetected default season
+  const data = await getRosterForWeek(event.pathParameters.leagueId, seasonId, event.pathParameters.teamId, event.queryStringParameters.week);
   return {
     statusCode: 200,
     body: JSON.stringify(
-      {
-        message: `Roster data for team: ${event.pathParameters.teamId} in league: ${event.pathParameters.leagueId}. Week ${event.queryStringParameters.week || 'default'} `,
-      },
+      data,
       null,
       2
     ),

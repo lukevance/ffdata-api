@@ -15,4 +15,17 @@ module.exports.getLeagueOverview = async (leagueId, season) => {
     const res = await fetch(url, options);
     const json = await res.json();
     return json;
+};
+
+module.exports.getRosterForWeek = async (leagueId, season, teamId, week) => {
+    const url = `http://fantasy.espn.com/apis/v3/games/ffl/seasons/${season}/segments/0/leagues/${leagueId}?forTeamId=${teamId}&scoringPeriodId=${week}&view=mRoster`;
+    const options = {
+        method: 'GET',
+        headers: {
+            cookie: `espn_s2=${ESPN_S2}; SWID=${ESPN_SWID}`
+        }
+    };
+    const res = await fetch(url, options);
+    const json = await res.json();
+    return json;
 }
