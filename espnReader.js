@@ -18,7 +18,8 @@ module.exports.getLeagueOverview = async (leagueId, season) => {
 };
 
 module.exports.getRosterForWeek = async (leagueId, season, teamId, week) => {
-    const url = `http://fantasy.espn.com/apis/v3/games/ffl/seasons/${season}/segments/0/leagues/${leagueId}?forTeamId=${teamId}&scoringPeriodId=${week}&view=mRoster`;
+    const weekParamString = week ? `&scoringPeriodId=${week}` : "";
+    const url = `http://fantasy.espn.com/apis/v3/games/ffl/seasons/${season}/segments/0/leagues/${leagueId}?forTeamId=${teamId}&view=mRoster${weekParamString}`;
     const options = {
         method: 'GET',
         headers: {

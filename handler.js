@@ -54,7 +54,11 @@ module.exports.overview = async event => {
 module.exports.weeklyRosters = async event => {
   // TODO: implement roster retrieval
   const seasonId = event.queryStringParameters && event.queryStringParameters.season ? event.queryStringParameters.season : '2019'; // TODO: change to autodetected default season
-  const data = await getRosterForWeek(event.pathParameters.leagueId, seasonId, event.pathParameters.teamId, event.queryStringParameters.week);
+  const leagueId = event.pathParameters.id;
+  const teamId = event.pathParameters.teamId;
+  const week = event.queryStringParameters ? event.queryStringParameters.week : null;
+  // make request using params generated above
+  const data = await getRosterForWeek(leagueId, seasonId, teamId, week);
   return {
     statusCode: 200,
     body: JSON.stringify(
