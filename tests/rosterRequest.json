@@ -1,0 +1,13 @@
+{
+    "resource": "/leagues/286565/teams/7/rosters",
+    "path": "/leagues/286565/teams/7/rosters?week=3&season=2018",
+    "httpMethod": "GET",
+    "pathParameters": {
+        "id": "286565",
+        "teamId": "7"
+    },
+    "queryStringParameters": {
+        "week": "1",
+        "season": 2018
+    }
+  }
