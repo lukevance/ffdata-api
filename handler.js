@@ -1,6 +1,10 @@
 'use strict';
 
-const { getLeagueOverview, getRosterForWeek } = require('./espnReader');
+const { 
+  getLeagueOverview, 
+  getRosterForWeek,
+  getCurrentBoxscore,
+ } = require('./espnReader');
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -19,9 +23,6 @@ module.exports.hello = async event => {
       2
     ),
   };
-
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
 };
 
 module.exports.overview = async event => {
@@ -68,3 +69,20 @@ module.exports.weeklyRosters = async event => {
     ),
   };
 };
+
+module.exports.currentMatchup = async event => {
+  const seasonId = event.queryStringParameters && event.queryStringParameters.season ? event.queryStringParameters.season : '2019';
+  const leagueId = event.pathParameters.id;
+  const teamId = event.pathParameters.teamId;
+  const week = event.queryStringParameters ? event.queryStringParameters.week : null;
+  // make request using params generated above
+  const data = await getCurrentBoxscore(leagueId, seasonId, teamId, week);
+  return {
+    statusCode: 200,
+    body: JSON.stringify(
+      data,
+      null,
+      2
+    ),
+  };
+}

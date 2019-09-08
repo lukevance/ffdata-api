@@ -29,4 +29,29 @@ module.exports.getRosterForWeek = async (leagueId, season, teamId, week) => {
     const res = await fetch(url, options);
     const json = await res.json();
     return json;
-}
+};
+
+module.exports.getCurrentBoxscore = async (leagueId, season, teamId) => {
+    const url = `http://fantasy.espn.com/apis/v3/games/ffl/seasons/${season}/segments/0/leagues/${leagueId}?forTeamId=${teamId}&view=mScoreboard&view=mSchedule`
+    const options = {
+        method: 'GET',
+        headers: {
+            cookie: `espn_s2=${ESPN_S2}; SWID=${ESPN_SWID}`
+        }
+    };
+    const res = await fetch(url, options);
+    const json = await res.json();
+    const currentWeek = json.status.currentMatchupPeriod;
+    if (json.schedule){
+        const currentWeekGames = json.schedule.filter(game => game.matchupPeriodId === currentWeek);
+        return {
+            team: json.teams[0],
+            // schedule: currentWeekGames.filter(game => game.home.teamId === teamId || game.away.teamId === teamId)
+            schedule: currentWeekGames
+        };
+    } else {
+        return {
+            message: "no schedule data found"
+        }
+    }
+};

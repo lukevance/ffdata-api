@@ -74,3 +74,18 @@ functions:
               querystrings:
                 season: false
                 week: false
+  currrentMatchup:
+    handler: handler.currentMatchup
+    events:
+      - http:
+          path: leagues/{id}/teams/{teamId}/boxscore
+          method: get
+          cors: true
+          request:
+            parameters:
+              paths:
+                id: true
+                teamId: true
+              querystrings:
+                season: false
+                week: false
