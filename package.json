@@ -11,7 +11,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "serverless invoke local --function weeklyRosters --path tests/rosterRequest.json",
+    "test-roster": "sls invoke local -f weeklyRosters --path tests/rosterRequest.json",
+    "test-boxscore": "sls invoke local -f currentMatchup --path tests/boxscoreReq.json",
     "test-overview": "sls invoke local -f hello -p ./tests/sample-event.json"
   },
   "author": "@lukevance",

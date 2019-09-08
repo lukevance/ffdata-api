@@ -44,10 +44,10 @@ module.exports.getCurrentBoxscore = async (leagueId, season, teamId) => {
     const currentWeek = json.status.currentMatchupPeriod;
     if (json.schedule){
         const currentWeekGames = json.schedule.filter(game => game.matchupPeriodId === currentWeek);
+        const scheduleForTeam = currentWeekGames.filter(game => game.home.teamId == teamId || game.away.teamId == teamId);
         return {
             team: json.teams[0],
-            // schedule: currentWeekGames.filter(game => game.home.teamId === teamId || game.away.teamId === teamId)
-            schedule: currentWeekGames
+            boxscore: scheduleForTeam[0]
         };
     } else {
         return {

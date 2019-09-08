@@ -1,0 +1,9 @@
+{
+    "resource": "/leagues/286565/teams/7/boxscore",
+    "path": "/leagues/286565/teams/7/boxscore",
+    "httpMethod": "GET",
+    "pathParameters": {
+        "id": "286565",
+        "teamId": "7"
+    }
+  }
