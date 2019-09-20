@@ -31,8 +31,9 @@ module.exports.getRosterForWeek = async (leagueId, season, teamId, week) => {
     return json;
 };
 
-module.exports.getCurrentBoxscore = async (leagueId, season, teamId) => {
-    const url = `http://fantasy.espn.com/apis/v3/games/ffl/seasons/${season}/segments/0/leagues/${leagueId}?forTeamId=${teamId}&view=mScoreboard&view=mSchedule`
+module.exports.getCurrentBoxscore = async (leagueId, season, teamId, week) => {
+    const weekParamString = week ? `&scoringPeriodId=${week}` : "";
+    const url = `http://fantasy.espn.com/apis/v3/games/ffl/seasons/${season}/segments/0/leagues/${leagueId}?view=mBoxscore&view=mMatchupScore`
     const options = {
         method: 'GET',
         headers: {
