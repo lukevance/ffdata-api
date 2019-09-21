@@ -32,7 +32,7 @@ module.exports.getRosterForWeek = async (leagueId, season, teamId, week) => {
 };
 
 module.exports.getCurrentBoxscore = async (leagueId, season, teamId, week) => {
-    const weekParamString = week ? `&scoringPeriodId=${week}` : "";
+    // const weekParamString = week ? `&scoringPeriodId=${week}` : "";
     const url = `http://fantasy.espn.com/apis/v3/games/ffl/seasons/${season}/segments/0/leagues/${leagueId}?view=mBoxscore&view=mMatchupScore`
     const options = {
         method: 'GET',
@@ -42,17 +42,17 @@ module.exports.getCurrentBoxscore = async (leagueId, season, teamId, week) => {
     };
     const res = await fetch(url, options);
     const json = await res.json();
-    const currentWeek = json.status.currentMatchupPeriod;
-    if (json.schedule){
-        const currentWeekGames = json.schedule.filter(game => game.matchupPeriodId === currentWeek);
-        const scheduleForTeam = currentWeekGames.filter(game => game.home.teamId == teamId || game.away.teamId == teamId);
+    if (json.schedule && json.status){
+        const currentWeekGames = json.schedule.filter(game => game.matchupPeriodId === json.status.currentMatchupPeriod);
+        const matchupForTeam = currentWeekGames.find(game => game.home.teamId == teamId || game.away.teamId == teamId);
         return {
-            team: json.teams[0],
-            boxscore: scheduleForTeam[0]
+            team: json.teams.find(team => team.id == teamId),
+            boxscore: matchupForTeam
         };
     } else {
-        return {
-            message: "no schedule data found"
-        }
+        return json;
+        // return {
+        //     message: "no schedule data found"
+        // }
     }
 };
