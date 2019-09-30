@@ -11,7 +11,7 @@ const corsHeaders = {
   'Access-Control-Allow-Credentials': true,
 };
 
-module.exports.hello = async event => {
+module.exports.ping = async event => {
   return {
     statusCode: 200,
     body: JSON.stringify(
