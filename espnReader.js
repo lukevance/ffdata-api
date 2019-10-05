@@ -33,7 +33,7 @@ module.exports.getRosterForWeek = async (leagueId, season, teamId, week) => {
 
 module.exports.getCurrentBoxscore = async (leagueId, season, teamId, week) => {
     // const weekParamString = week ? `&scoringPeriodId=${week}` : "";
-    const url = `http://fantasy.espn.com/apis/v3/games/ffl/seasons/${season}/segments/0/leagues/${leagueId}?view=mBoxscore&view=mMatchupScore`
+    const url = `http://fantasy.espn.com/apis/v3/games/ffl/seasons/${season}/segments/0/leagues/${leagueId}?view=mBoxscore&view=mMatchupScore`;
     const options = {
         method: 'GET',
         headers: {
@@ -51,8 +51,23 @@ module.exports.getCurrentBoxscore = async (leagueId, season, teamId, week) => {
         };
     } else {
         return json;
-        // return {
-        //     message: "no schedule data found"
-        // }
     }
 };
+
+module.exports.getSeasonStatsByPosition = async (leagueId, season) => {
+    const url = `http://fantasy.espn.com/apis/v3/games/ffl/seasons/${season}/segments/0/leagues/${leagueId}?view=mBoxscore&view=mMatchupScore`
+    const options = {
+        method: 'GET',
+        headers: {
+            cookie: `espn_s2=${ESPN_S2}; SWID=${ESPN_SWID}`
+        }
+    };
+    const res = await fetch(url, options);
+    const json = await res.json();
+    if (json.schedule){
+        const completedGames = json.schedule.filter(game => game.winner !== "UNDECIDED");
+        return completedGames;
+    } else {
+        return json;
+    }
+}

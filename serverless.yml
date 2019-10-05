@@ -55,3 +55,16 @@ functions:
               querystrings:
                 season: false
                 week: false
+  seasonStats:
+    handler: handler.seasonStats
+    events:
+      - http:
+          path: leagues/{id}/teams/season-stats
+          method: get
+          cors: true
+          request:
+            parameters:
+              paths:
+                id: true
+              querystrings:
+                season: false
