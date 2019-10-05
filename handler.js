@@ -91,7 +91,8 @@ module.exports.currentMatchup = async event => {
 module.exports.positionStats = async event => {
   const seasonId = event.queryStringParameters && event.queryStringParameters.season ? event.queryStringParameters.season : '2019';
   const leagueId = event.pathParameters.id;
-  const data = await getStatsByPosition(leagueId, seasonId);
+  const week = event.queryStringParameters ? event.queryStringParameters.week : null;
+  const data = await getStatsByPosition(leagueId, seasonId, week);
   return {
     statusCode: 200,
     body: JSON.stringify(

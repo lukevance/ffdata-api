@@ -64,6 +64,7 @@ module.exports.getCurrentBoxscore = async (leagueId, season, teamId, week) => {
 };
 
 module.exports.getStatsByPosition = async (leagueId, season, week) => {
+    // only append week if wee param was provided
     const weekParamString = week ? `&scoringPeriodId=${week}` : "";
     const url = `http://fantasy.espn.com/apis/v3/games/ffl/seasons/${season}/segments/0/leagues/${leagueId}?view=mBoxscore&view=mMatchupScore${weekParamString}`;
     const options = {
@@ -75,11 +76,22 @@ module.exports.getStatsByPosition = async (leagueId, season, week) => {
     const res = await fetch(url, options);
     const json = await res.json();
     if (json.schedule){
+        // filter out games in schedule not in scoring period
         const selectedWeekGames = json.schedule.filter(game => game.matchupPeriodId === json.scoringPeriodId);
+        // add games from filter to teams array
         const teamsWithGames = json.teams.map(team => {
             const teamSchedule = selectedWeekGames.filter(game => game.home.teamId === team.id || game.away.teamId === team.id);
             team.schedule = teamSchedule.map(game => {
+                // modify roster for simplified view of players
                 const roster = game[scheduleTeamHomeOrAway(game, team.id)].rosterForCurrentScoringPeriod;
+                roster.players = roster.entries.map(entry => {
+                    return {
+                        position: entry.playerPoolEntry.player.defaultPositionId,
+                        name: entry.playerPoolEntry.player.fullName,
+                        points: entry.playerPoolEntry.appliedStatTotal,
+                        starter: Boolean(entry.lineupSlotId !== 20)
+                    }
+                })
                 return {
                     week: game.matchupPeriodId,
                     roster: roster
