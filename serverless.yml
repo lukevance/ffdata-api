@@ -56,10 +56,10 @@ functions:
                 season: false
                 week: false
   seasonStats:
-    handler: handler.seasonStats
+    handler: handler.positionStats
     events:
       - http:
-          path: leagues/{id}/teams/season-stats
+          path: leagues/{id}/teams/stats
           method: get
           cors: true
           request:

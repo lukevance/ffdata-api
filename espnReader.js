@@ -63,8 +63,9 @@ module.exports.getCurrentBoxscore = async (leagueId, season, teamId, week) => {
     }
 };
 
-module.exports.getSeasonStatsByPosition = async (leagueId, season) => {
-    const url = `http://fantasy.espn.com/apis/v3/games/ffl/seasons/${season}/segments/0/leagues/${leagueId}?view=mBoxscore&view=mMatchupScore`
+module.exports.getStatsByPosition = async (leagueId, season, week) => {
+    const weekParamString = week ? `&scoringPeriodId=${week}` : "";
+    const url = `http://fantasy.espn.com/apis/v3/games/ffl/seasons/${season}/segments/0/leagues/${leagueId}?view=mBoxscore&view=mMatchupScore${weekParamString}`;
     const options = {
         method: 'GET',
         headers: {
@@ -74,16 +75,16 @@ module.exports.getSeasonStatsByPosition = async (leagueId, season) => {
     const res = await fetch(url, options);
     const json = await res.json();
     if (json.schedule){
-        const completedGames = json.schedule.filter(game => game.winner !== "UNDECIDED");
+        const selectedWeekGames = json.schedule.filter(game => game.matchupPeriodId === json.scoringPeriodId);
         const teamsWithGames = json.teams.map(team => {
-            const teamSchedule = completedGames.filter(game => game.home.teamId === team.id || game.away.teamId === team.id);
-            
+            const teamSchedule = selectedWeekGames.filter(game => game.home.teamId === team.id || game.away.teamId === team.id);
             team.schedule = teamSchedule.map(game => {
+                const roster = game[scheduleTeamHomeOrAway(game, team.id)].rosterForCurrentScoringPeriod;
                 return {
                     week: game.matchupPeriodId,
-                    roster: game[scheduleTeamHomeOrAway(game, team.id)]
-                }
-            })
+                    roster: roster
+                };
+            });
             return team;
         });
         return teamsWithGames;

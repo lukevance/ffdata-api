@@ -4,7 +4,7 @@ const {
   getLeagueOverview, 
   getRosterForWeek,
   getCurrentBoxscore,
-  getSeasonStatsByPosition
+  getStatsByPosition
  } = require('./espnReader');
 
 const corsHeaders = {
@@ -88,10 +88,10 @@ module.exports.currentMatchup = async event => {
   };
 }
 
-module.exports.seasonStats = async event => {
+module.exports.positionStats = async event => {
   const seasonId = event.queryStringParameters && event.queryStringParameters.season ? event.queryStringParameters.season : '2019';
   const leagueId = event.pathParameters.id;
-  const data = await getSeasonStatsByPosition(leagueId, seasonId);
+  const data = await getStatsByPosition(leagueId, seasonId);
   return {
     statusCode: 200,
     body: JSON.stringify(
