@@ -12,6 +12,23 @@ const scheduleTeamHomeOrAway = (game, teamId) => {
     }
 };
 
+const positionIdToString = posId => {
+    switch (posId) {
+        case 1:
+            return "QB";
+        case 2:
+            return "RB";
+        case 3:
+            return "WR";
+        case 4:
+            return "TE";
+        case 16:
+            return "D/ST";
+        default:
+            return null;
+    }
+}
+
 module.exports.getLeagueOverview = async (leagueId, season) => {
     console.log(leagueId);
     const url = `http://fantasy.espn.com/apis/v3/games/ffl/seasons/${season}/segments/0/leagues/${leagueId}?view=mMatchupScore&view=mPositionalRatings&view=mTeam`;
@@ -84,14 +101,17 @@ module.exports.getStatsByPosition = async (leagueId, season, week) => {
             team.schedule = teamSchedule.map(game => {
                 // modify roster for simplified view of players
                 const roster = game[scheduleTeamHomeOrAway(game, team.id)].rosterForCurrentScoringPeriod;
+                // create simplified "players" array as part of roster obj
                 roster.players = roster.entries.map(entry => {
                     return {
-                        position: entry.playerPoolEntry.player.defaultPositionId,
+                        position: positionIdToString(entry.playerPoolEntry.player.defaultPositionId),
                         name: entry.playerPoolEntry.player.fullName,
                         points: entry.playerPoolEntry.appliedStatTotal,
                         starter: Boolean(entry.lineupSlotId !== 20)
                     }
-                })
+                });
+                // rm bloated entry array from roster obj
+                delete roster.entries;
                 return {
                     week: game.matchupPeriodId,
                     roster: roster
