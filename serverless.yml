@@ -68,3 +68,4 @@ functions:
                 id: true
               querystrings:
                 season: false
+                week: false

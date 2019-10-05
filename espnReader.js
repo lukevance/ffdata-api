@@ -2,6 +2,15 @@
 const fetch = require('node-fetch');
 const { ESPN_S2, ESPN_SWID} = require("./.env.json");
 
+const scheduleTeamHomeOrAway = (game, teamId) => {
+    if (game.away.teamId === teamId){
+        return "away";
+    } else if (game.home.teamId === teamId){
+        return "home";
+    } else {
+        return null;
+    }
+};
 
 module.exports.getLeagueOverview = async (leagueId, season) => {
     console.log(leagueId);
@@ -66,7 +75,18 @@ module.exports.getSeasonStatsByPosition = async (leagueId, season) => {
     const json = await res.json();
     if (json.schedule){
         const completedGames = json.schedule.filter(game => game.winner !== "UNDECIDED");
-        return completedGames;
+        const teamsWithGames = json.teams.map(team => {
+            const teamSchedule = completedGames.filter(game => game.home.teamId === team.id || game.away.teamId === team.id);
+            
+            team.schedule = teamSchedule.map(game => {
+                return {
+                    week: game.matchupPeriodId,
+                    roster: game[scheduleTeamHomeOrAway(game, team.id)]
+                }
+            })
+            return team;
+        });
+        return teamsWithGames;
     } else {
         return json;
     }
