@@ -95,6 +95,7 @@ module.exports.positionStats = async event => {
   const data = await getStatsByPosition(leagueId, seasonId, week);
   return {
     statusCode: 200,
+    headers: corsHeaders,
     body: JSON.stringify(
       data,
       null,
