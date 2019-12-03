@@ -102,4 +102,37 @@ module.exports.positionStats = async event => {
       2
     ),
   };
-}
+};
+
+module.exports.seasonSummary = async event => {
+  // check for season param or set default
+  const seasonId = event.queryStringParameters && event.queryStringParameters.season ? event.queryStringParameters.season : '2019';
+  const leagueId = event.pathParameters.id;
+  // fetch data for current week
+  let data = await getStatsByPosition(leagueId, seasonId, null);
+  const currWeek = await (data[0].schedule[0].week * 1);
+  const weeks = [...Array(currWeek).keys()].filter(num => num !== 0);
+  const getAllWeeks = async () => {
+    return Promise.all(weeks.map(week => getStatsByPosition(leagueId, seasonId, week)));
+  }
+  // retrieve array of all weeks data
+  const allWeeksData = await getAllWeeks();
+  // map over original current week array of teams and add all weeks to schedule property
+  const compiledData = data.map(team => {
+    allWeeksData.forEach(weekTeams => {
+      const currTeamWeek = weekTeams.find(tm => tm.id === team.id);
+      // add the week obj from the schedule array to the master data obj
+      team.schedule.push(currTeamWeek.schedule[0]);
+    });
+    return team;
+  });
+  return {
+    statusCode: 200,
+    headers: corsHeaders,
+    body: JSON.stringify(
+      compiledData,
+      null,
+      2
+    ),
+  };
+};
