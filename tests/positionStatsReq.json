@@ -1,0 +1,8 @@
+{
+    "resource": "/leagues/286565/teams/season-stats",
+    "path": "/leagues/286565/teams/season-stats",
+    "httpMethod": "GET",
+    "pathParameters": {
+        "id": "286565"
+    }
+  }

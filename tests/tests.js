@@ -7,3 +7,28 @@ const test = async () => {
 }
 
 test();
+
+const result = [
+    {
+        id: 1,
+        nickname: "",
+        schedule: [
+            {
+                week: 1,
+                roster: [
+                    {
+                        position: "QB",
+                        name: "",
+                        starter: true,
+                        points: 12
+                    },
+                    {
+                        position: "QB",
+                        starter: true,
+                        points: 12
+                    }
+                ]
+            }
+        ]
+    }
+]
