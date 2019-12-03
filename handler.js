@@ -124,6 +124,7 @@ module.exports.seasonSummary = async event => {
       // add the week obj from the schedule array to the master data obj
       team.schedule.push(currTeamWeek.schedule[0]);
     });
+    team.schedule.sort((a,b) => a.week - b.week);
     return team;
   });
   return {
